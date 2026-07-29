@@ -12,7 +12,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
-import { Type } from "@sinclair/typebox";
+import { Type } from "typebox";
 import { lint } from "./ste-lint.js";
 import type { SteMode } from "./ste-rules.js";
 
@@ -180,8 +180,7 @@ function registerHooks(pi: ExtensionAPI, state: State) {
 
 	pi.on("session_start", async (_event, ctx) => {
 		if (state.mode) {
-			const label =
-				state.mode === "strict" ? "[STE:STRICT]" : "[STE:FLAVORED]";
+			const label = state.mode === "strict" ? "[STE:STRICT]" : "[STE:FLAVORED]";
 			ctx.ui.setStatus("stop-slop", label);
 		}
 	});

@@ -27,6 +27,7 @@
     "preflight": "tsc --noEmit && eslint src/ && vitest run"
   },
   "keywords": [
+    "pi-package",
     "pi-agent",
     "extension",
     "ste",
@@ -49,7 +50,10 @@
     "vitest": "^3.2.7"
   },
   "dependencies": {
-    "jiti": "^2.7.0",
+    "jiti": "^2.7.0"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
     "typebox": "*"
   }
 }

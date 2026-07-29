@@ -31,6 +31,21 @@ describe("ste-lint", () => {
 		expect(result.violations["contraction"]).toBe(2);
 	});
 
+	it("does not flag possessive 's as a contraction", () => {
+		const result = lint(
+			"The author's book describes the system's behavior. " +
+				"Claude's score improved and the industry's standard applies.",
+		);
+		expect(result.violations["contraction"]).toBe(0);
+	});
+
+	it("still flags common pronoun 's contractions", () => {
+		const result = lint(
+			"It's ready. That's correct. Here's the file. Let's begin.",
+		);
+		expect(result.violations["contraction"]).toBe(4);
+	});
+
 	it("detects passive voice", () => {
 		const result = lint("The file is read by the parser.");
 		expect(result.violations["passive_voice"]).toBeGreaterThanOrEqual(1);

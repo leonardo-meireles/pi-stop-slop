@@ -43,6 +43,19 @@ const PASSIVE_RE = new RegExp(
 // biome-ignore lint/security/noDangerouslyInsertedRegexpTheWorldIsOnFire: static sources
 const ING_MAIN_RE = new RegExp(`${BE_FORMS.source}\\s+\\w+ing\\b`, "gi");
 
+// Suffixes t/re/ve/ll/d/m never form possessives, so any \w+'suffix
+// match is always a real contraction (don't, we're, I've, we'll, I'd, I'm).
+// The 's suffix is ambiguous (it's = it is, but author's = possessive),
+// so it only counts when the preceding word is a known pronoun/adverb
+// that commonly forms an 's contraction — never a possessive noun.
+const APOSTROPHE_S_PRONOUNS =
+	"it|that|what|who|here|there|let|he|she|how|where|when|why|one";
+// biome-ignore lint/security/noDangerouslyInsertedRegexpTheWorldIsOnFire: static hardcoded constant, not user input
+const CONTRACTION_RE = new RegExp(
+	`\\b\\w+['’](?:t|re|ve|ll|d|m)\\b|\\b(?:${APOSTROPHE_S_PRONOUNS})['’]s\\b`,
+	"gi",
+);
+
 // ── helpers ────────────────────────────────────────────────
 
 function stripCode(text: string): string {
@@ -128,10 +141,8 @@ export function lint(text: string): LintResult {
 	// semicolons
 	v["semicolon"] = (cleaned.match(/;/g) ?? []).length;
 
-	// contractions
-	v["contraction"] = (
-		cleaned.match(/\b\w+['’](?:t|re|ve|ll|d|s|m)\b/g) ?? []
-	).length;
+	// contractions (excludes possessive 's: "author's" is not "author is")
+	v["contraction"] = (cleaned.match(CONTRACTION_RE) ?? []).length;
 
 	// passive voice, -ing, nominalizations
 	v["passive_voice"] = countRE(cleaned, PASSIVE_RE);
