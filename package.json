@@ -10,7 +10,10 @@
   "files": [
     "src/",
     "skills/",
-    "bin/"
+    "bin/",
+    "!src/**/*.test.ts",
+    "!src/pi-types.d.ts",
+    "!src/benchmark-data.ts"
   ],
   "pi": {
     "extensions": [
