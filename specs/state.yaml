@@ -1,0 +1,6 @@
+workflow_mode: solo-git
+active_flow: null
+git:
+  branch: main
+handoff:
+  next_skill: plan-work
